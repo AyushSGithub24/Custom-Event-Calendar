@@ -1,5 +1,5 @@
 import './App.css'
-import EventCalender from './components/calendar/calendarBody'
+import EventCalender from './components/calendar/EventCalendar'
 
 function App() {
 
