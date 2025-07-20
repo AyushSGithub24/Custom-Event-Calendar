@@ -31,6 +31,8 @@ export function CalendarGrid({
         format(new Date(ev.start), "yyyy-MM-dd") === format(day, "yyyy-MM-dd")
     );
 
+
+
   return (
     <div className="p-2">
       <div className="grid grid-cols-7 text-center font-semibold text-gray-600 border-b">
@@ -67,33 +69,81 @@ export function CalendarGrid({
               onDrop={(e) => {
                 const eventId = e.dataTransfer.getData("text/event-id");
                 if (!eventId) return;
+                const originalEvent = events.find((ev) => ev._id === eventId);
+                if (
+                  !originalEvent ||
+                  !originalEvent.start ||
+                  !originalEvent.end
+                ) {
+                  console.error("Original event or its start/end is missing");
+                  return;
+                }
 
-                const newStart = new Date(day); // The day cell the event is dropped onto
-                newStart.setHours(10); // Optional: set default start time
-                const newEnd = new Date(newStart.getTime() + 60 * 60 * 1000); // +1 hour
+                const originalStart = new Date(originalEvent.start);
+                const originalEnd = new Date(originalEvent.end);
+
+                // Ensure originalStart and originalEnd are valid dates
+                if (isNaN(originalStart) || isNaN(originalEnd)) {
+                  console.error("Invalid start or end date in event");
+                  return;
+                }
+
+                const dropDate = new Date(day);
+                if (isNaN(dropDate)) {
+                  console.error("Invalid drop date");
+                  return;
+                }
+
+                // Construct newStart with original time
+                const newStart = new Date(dropDate);
+                newStart.setHours(
+                  originalStart.getHours(),
+                  originalStart.getMinutes(),
+                  0,
+                  0
+                );
+
+                const duration =
+                  originalEnd.getTime() - originalStart.getTime();
+                const newEnd = new Date(newStart.getTime() + duration);
+
+                if (isNaN(newStart) || isNaN(newEnd)) {
+                  console.error("Resulting newStart or newEnd is invalid");
+                  return;
+                }
 
                 handleEventDrop({ id: eventId, start: newStart, end: newEnd });
               }}
               onDragOver={(e) => e.preventDefault()}
             >
               <span
-                className={`absolute top-1 right-1 text-sm ${
+                className={`absolute top-1 right-1 z-1 text-sm ${
                   isSelected
                     ? "text-white"
                     : isCurrentDay
                     ? "text-blue-600"
-                    : "text-gray-500"
+                    : "text-gray-00"
                 }`}
               >
                 {format(day, "d")}
               </span>
               {/* Event dot */}
-              <div className="absolute bottom-1 left-1 right-1 text-xs text-gray-600 overflow-hidden whitespace-nowrap text-ellipsis">
+              <div className="absolute bottom-1 left-1 right-1 max-h-[60px] overflow-y-auto space-y-1 pr-1 text-xs text-gray-600 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
                 {events
                   .filter(
                     (ev) =>
                       format(new Date(ev.start), "yyyy-MM-dd") ===
                       format(day, "yyyy-MM-dd")
+                  )
+                  .filter(
+                    (ev, index, self) =>
+                      index ===
+                      self.findIndex(
+                        (e) =>
+                          e._id === ev._id &&
+                          format(new Date(e.start), "yyyy-MM-dd") ===
+                            format(new Date(ev.start), "yyyy-MM-dd")
+                      )
                   )
                   .map((ev) => (
                     <div
