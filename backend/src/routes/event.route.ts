@@ -19,12 +19,6 @@ eventRouter.get("/", async (req: Request, res: Response) => {
     if (!user) return res.status(401).json({ error: "Unauthorized" });
     const now = new Date();
 
-    // Cleanup old events
-    await Event.deleteMany({
-      user: user._id,
-      end: { $lt: now }, // Events that have ended
-    });
-
     // Fetch only future events
      const futureEvents = await Event.find({
       user: user._id,

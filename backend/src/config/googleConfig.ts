@@ -12,8 +12,7 @@ export const oauth2Client = new google.auth.OAuth2(
 export const scopes = [
  "openid",
   "email",
-  "profile",
-  "https://www.googleapis.com/auth/calendar" 
+  "profile"
 ];
 
 

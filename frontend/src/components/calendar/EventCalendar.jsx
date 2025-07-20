@@ -2,19 +2,14 @@ import {  useState } from "react";
 import {add,sub} from "date-fns";
 import { CalendarGrid } from "./CalendarGrid";
 import { CalendarHeader } from "./CalendarHeader";
+import useEventStore from "../../stores/eventStore";
 
 // --- Main Parent Component: EventCalendar ---
-export default function EventCalendar({ events, onDateClick, handleEventDrop }) {
+export default function EventCalendar() {
+    const { calendarEvents, handleDateClick, handleEventDrop } = useEventStore();
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
-    
 
-    const handleDateSelect = (day) => {
-        setSelectedDate(day);
-        // This is where you will trigger the modal to add an event
-        console.log("Selected date:", day);
-         onDateClick(day); // Open sidebar with selected date
-    };
 
     const handleMonthSelect = (monthIndex) => {
         setCurrentMonth(new Date(currentMonth.getFullYear(), monthIndex, 1));
@@ -40,8 +35,8 @@ export default function EventCalendar({ events, onDateClick, handleEventDrop }) 
                 <CalendarGrid 
                     currentMonth={currentMonth}
                     selectedDate={selectedDate}
-                    onDateSelect={handleDateSelect}
-                    events={events}
+                    onDateSelect={handleDateClick}
+                    events={calendarEvents}
                     handleEventDrop={handleEventDrop}
                 />
             </div>
