@@ -1,1 +1,1 @@
-{"root":["./src/index.ts"],"version":"5.8.3"}
+{"root":["./src/index.ts","./src/models/event.model.ts","./src/models/user.model.ts","./src/config/googleconfig.ts","./src/routes/auth.route.ts","./src/routes/event.route.ts","./src/validators/eventvalidator.ts"],"version":"5.8.3"}
