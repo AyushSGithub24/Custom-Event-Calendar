@@ -1,11 +1,16 @@
 import { eachDayOfInterval, endOfMonth, isSameDay, isToday, startOfMonth,format } from "date-fns";
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-export function CalendarGrid({ currentMonth, selectedDate, onDateSelect }) {
+export function CalendarGrid({ currentMonth, selectedDate, onDateSelect, events = [] }) {
     const firstDayOfMonth = startOfMonth(currentMonth);
     const lastDayOfMonth = endOfMonth(currentMonth);    
     const eachDayInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
     const startingDayIndex = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
     const emptyDays = Array.from({ length: startingDayIndex });
+
+     // Helper: check if a day has events
+    const hasEvent = (day) =>
+        events.some(ev => format(new Date(ev.start), "yyyy-MM-dd") === format(day, "yyyy-MM-dd"));
+
 
     return (
         <div className="p-2">
@@ -30,6 +35,10 @@ export function CalendarGrid({ currentMonth, selectedDate, onDateSelect }) {
                             <span className={`absolute top-1 right-1 text-sm ${isSelected ? 'text-white' : isCurrentDay ? 'text-blue-600' : 'text-gray-500'}`}>
                                 {format(day, "d")}
                             </span>
+                              {/* Event dot */}
+                            {hasEvent(day) && (
+                                <span className="absolute bottom-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#58aa59]"></span>
+                            )}
                         </div>
                     );
                 })}

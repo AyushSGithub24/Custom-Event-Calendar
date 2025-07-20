@@ -4,7 +4,7 @@ import { CalendarGrid } from "./CalendarGrid";
 import { CalendarHeader } from "./CalendarHeader";
 
 // --- Main Parent Component: EventCalendar ---
-export default function EventCalendar() {
+export default function EventCalendar({ events, onDateClick }) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     
@@ -13,6 +13,7 @@ export default function EventCalendar() {
         setSelectedDate(day);
         // This is where you will trigger the modal to add an event
         console.log("Selected date:", day);
+         onDateClick(day); // Open sidebar with selected date
     };
 
     const handleMonthSelect = (monthIndex) => {
@@ -24,7 +25,6 @@ export default function EventCalendar() {
     };
 
     return (
-     
             <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
                 <CalendarHeader 
                     currentMonth={currentMonth}
@@ -41,6 +41,7 @@ export default function EventCalendar() {
                     currentMonth={currentMonth}
                     selectedDate={selectedDate}
                     onDateSelect={handleDateSelect}
+                    events={events}
                 />
             </div>
    
