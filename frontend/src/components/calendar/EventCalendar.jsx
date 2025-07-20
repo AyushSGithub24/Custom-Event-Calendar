@@ -4,7 +4,7 @@ import { CalendarGrid } from "./CalendarGrid";
 import { CalendarHeader } from "./CalendarHeader";
 
 // --- Main Parent Component: EventCalendar ---
-export default function EventCalendar({ events, onDateClick }) {
+export default function EventCalendar({ events, onDateClick, handleEventDrop }) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     
@@ -42,6 +42,7 @@ export default function EventCalendar({ events, onDateClick }) {
                     selectedDate={selectedDate}
                     onDateSelect={handleDateSelect}
                     events={events}
+                    handleEventDrop={handleEventDrop}
                 />
             </div>
    

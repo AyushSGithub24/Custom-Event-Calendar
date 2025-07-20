@@ -8,6 +8,18 @@ const toDatetimeLocal = (date) => {
   return local.toISOString().slice(0, 16);
 };
 
+const readableRecurrence = (rule) => {
+  if (!rule) return "";
+  if (rule.includes("FREQ=DAILY")) return "Daily";
+  if (rule.includes("FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR")) return "Weekdays";
+  if (rule.includes("FREQ=WEEKLY;BYDAY=SA,SU")) return "Weekends";
+  if (rule.includes("FREQ=WEEKLY")) return "Weekly";
+  if (rule.includes("FREQ=MONTHLY")) return "Monthly";
+  if (rule.includes("FREQ=YEARLY")) return "Yearly";
+  return rule; // fallback
+};
+
+
 export default function Sidebar({
   isSidebarOpen,
   setIsSidebarOpen,
@@ -87,7 +99,7 @@ export default function Sidebar({
                       )}
                       {event.recurrenceRule && (
                         <p className="text-xs mt-1 text-indigo-600 font-mono">
-                          Recurs: {event.recurrenceRule}
+                          Recurs: {readableRecurrence(event.recurrenceRule)}
                         </p>
                       )}
                     </div>

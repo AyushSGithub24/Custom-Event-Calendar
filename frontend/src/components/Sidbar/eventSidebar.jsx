@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {Clock,X,AlignLeft,Repeat,Save,} from "lucide-react";
+import { toast } from "react-toastify";
 
 
 export const EventSidebar = ({ isOpen, onClose, onSave, eventData, setFormData }) => {
@@ -42,11 +43,11 @@ export const EventSidebar = ({ isOpen, onClose, onSave, eventData, setFormData }
   const handleSave = (e) => {
     e.preventDefault();
     if (!eventData.title) {
-      alert("Title is required.");
+      toast.error("Title is required.");
       return;
     }
     if (new Date(eventData.end) <= new Date(eventData.start)) {
-      alert("End must be after start.");
+      toast.error("End must be after start.");
       return;
     }
     onSave(eventData);
