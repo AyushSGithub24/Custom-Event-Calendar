@@ -23,6 +23,8 @@ app.use(
   })
 );
 
+
+
 // Use session middleware
 app.use(
   session({
@@ -34,9 +36,9 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      secure: true, // true if using HTTPS
+      secure: false, // true if using HTTPS
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "lax", // 'none' for cross-site requests, 'lax' for same-site
     },
   })
 );
@@ -51,6 +53,14 @@ declare module "express-session" {
     userId?: string;
   }
 }
+
+app.use((req,res,next)=>{
+  console.log("state-"+req.session?.state+"\n");
+  console.log("tokens-"+req.session?.tokens+"\n");
+  console.log("userId-"+req.session?.userId+"\n");
+
+  next();
+})
 
 app.get("/",(req: Request, res: Response) => {
   res.send("Welcome to the Custom Event Calendar API");
