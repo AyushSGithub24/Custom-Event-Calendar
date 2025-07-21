@@ -52,6 +52,9 @@ declare module "express-session" {
   }
 }
 
+app.get("/",(req: Request, res: Response) => {
+  res.send("Welcome to the Custom Event Calendar API");
+});
 
 
 
