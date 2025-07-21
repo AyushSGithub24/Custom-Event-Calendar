@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { useUserStore } from "../stores/eventStore";
-
+const url=import.meta.env.VITE_API_BASE_URL;
 export default function ProtectedRoute({ children }) {
   const [auth, setAuth] = useState(null); // null = loading, false = unauth, true = auth
   const updateName = useUserStore((state) => state.updateName);
@@ -9,7 +9,7 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/auth/check", {
+        const res = await fetch(url+"/api/auth/check", {
           method: "GET",
           credentials: "include",
         });

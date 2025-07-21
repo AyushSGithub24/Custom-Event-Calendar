@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { RRule } from "rrule";
 import { toast } from 'react-toastify';
 
+const url=import.meta.env.VITE_API_BASE_URL;
+
 export const useUserStore = create((set, get) => ({
   name: "",
   updateName: (newName) => set({ name: newName }),
@@ -54,7 +56,7 @@ const useEventStore = create((set, get) => ({
   fetchEvents: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await fetch("http://localhost:3000/api/v1/events", {
+      const response = await fetch(url+"/api/v1/events", {
         credentials: "include", // Important for session/cookie auth
       });
       
@@ -115,7 +117,7 @@ const useEventStore = create((set, get) => ({
       if (eventData._id) {
         // Edit mode: PUT request
         response = await fetch(
-          `http://localhost:3000/api/v1/events/${eventData._id}`,
+          `${url}/api/v1/events/${eventData._id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -140,7 +142,7 @@ const useEventStore = create((set, get) => ({
         }));
       } else {
         // Add mode: POST request
-        response = await fetch("http://localhost:3000/api/v1/events", {
+        response = await fetch(url+"/api/v1/events", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -196,7 +198,7 @@ const useEventStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const res = await fetch(
-        `http://localhost:3000/api/v1/events/${eventToDelete._id}`,
+        `${url}/api/v1/events/${eventToDelete._id}`,
         {
           method: "DELETE",
           headers: {
@@ -225,7 +227,7 @@ const useEventStore = create((set, get) => ({
 
   handleLogout:  async () => {
       try {
-        await fetch("http://localhost:3000/logout", {
+        await fetch(url+"/logout", {
           method: "POST",
           credentials: "include",
         });
@@ -244,7 +246,7 @@ const useEventStore = create((set, get) => ({
         end: end.toISOString(),
       };
 
-      const res = await fetch(`http://localhost:3000/api/v1/events/${id}`, {
+      const res = await fetch(`${url}/api/v1/events/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
