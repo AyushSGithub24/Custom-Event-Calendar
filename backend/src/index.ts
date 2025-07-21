@@ -1,11 +1,7 @@
-import express, { Request, Response } from "express";
-import crypto from "crypto";
+import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import dotenv from "dotenv";
-import { google } from "googleapis";
-import { oauth2Client, scopes } from "./config/googleConfig";
 import cors from "cors";
-import { User } from "./Models/user.model";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import eventRouter from "./routes/event.route";
@@ -16,15 +12,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust the first proxy (for netlify)
 app.set("trust proxy", 1);
+
+// CORS configuration
 app.use(
   cors({
     origin:process.env.frontend_url, // your frontend origin
     credentials: true, // allow cookies
   })
 );
-
-
 
 // Use session middleware
 app.use(
@@ -55,7 +52,7 @@ declare module "express-session" {
   }
 }
 
-app.use((req,res,next)=>{
+app.use((req:Request,res:Response,next:NextFunction)=>{
   console.log("state-"+req.session?.state+"\n");
   console.log("tokens-"+req.session?.tokens+"\n");
   console.log("userId-"+req.session?.userId+"\n");
@@ -66,8 +63,6 @@ app.use((req,res,next)=>{
 app.get("/",(req: Request, res: Response) => {
   res.send("Welcome to the Custom Event Calendar API");
 });
-
-
 
 
 app.use("/api/v1/events", eventRouter);
