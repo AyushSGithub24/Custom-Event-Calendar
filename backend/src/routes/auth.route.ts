@@ -97,7 +97,7 @@ export default function authRoute(app: any) {
 
         req.session.userId = user._id as string;
 
-        res.redirect("http://localhost:5173/");
+        res.redirect(process.env.frontend_url || "http://localhost:5173" );
       } catch (err) {
         console.error("Error getting tokens:", err);
         res.status(500).send("Authentication failed");
