@@ -34,7 +34,7 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      secure: false, // true if using HTTPS
+      secure: true, // true if using HTTPS
       httpOnly: true,
       sameSite: "lax",
     },
