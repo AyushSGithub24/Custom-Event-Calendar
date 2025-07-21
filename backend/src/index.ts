@@ -36,9 +36,9 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      secure: false, // true if using HTTPS
+      secure: true, // true if using HTTPS
       httpOnly: true,
-      sameSite: "lax", // 'none' for cross-site requests, 'lax' for same-site
+      sameSite: "none", // 'none' for cross-site requests, 'lax' for same-site
     },
   })
 );

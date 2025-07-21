@@ -97,7 +97,16 @@ export default function authRoute(app: any) {
 
         req.session.userId = user._id as string;
 
-        res.redirect(process.env.frontend_url || "http://localhost:5173" );
+        // res.redirect(process.env.frontend_url || "http://localhost:5173" );
+        req.session.save((err) => {
+          if (err) {
+            console.error("Error saving session:", err);
+            return res.status(500).send("Failed to save session");
+          }
+
+          // Now that the session is saved, we can safely redirect
+          res.redirect(process.env.frontend_url || "http://localhost:5173");
+        });
       } catch (err) {
         console.error("Error getting tokens:", err);
         res.status(500).send("Authentication failed");
