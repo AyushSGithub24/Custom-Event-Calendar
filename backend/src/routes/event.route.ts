@@ -50,7 +50,7 @@ eventRouter.post("/", async (req: Request, res: Response) => {
     if (error.name === "ZodError") {
       return res.status(400).json({ error: error.errors });
     }
-    res.status(400).json({ error: error.message || "Failed to create event" });
+    res.status(400).json({ error: error  || "Failed to create event" });
   }
 });
 
@@ -72,6 +72,10 @@ eventRouter.put("/:id", async (req: Request, res: Response) => {
     // Fetch and update the document manually
     const event = await Event.findOne({ _id: req.params.id, user: user._id });
     if (!event) return res.status(404).json({ error: "Event not found" });
+    if(event.isRecurring){
+      res.status(400).json({ error: "Cannot update recurring events directly" });
+      return;
+    }
 
     Object.assign(event, parsed); // Merge updated fields
     const updatedEvent = await event.save(); // Triggers schema validation properly
@@ -81,6 +85,7 @@ eventRouter.put("/:id", async (req: Request, res: Response) => {
     if (error.name === "ZodError") {
       return res.status(400).json({ error: error.errors });
     }
+    console.log
     return res.status(400).json({ error: error.message || "Failed to update event" });
   }
 });
