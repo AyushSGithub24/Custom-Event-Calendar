@@ -1,3 +1,4 @@
+const url=import.meta.env.VITE_API_BASE_URL;
 export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200">
@@ -8,7 +9,7 @@ export default function Login() {
         <button
           type="button"
           onClick={() => {
-            window.location.href = "http://localhost:3000/login";
+            window.location.href = `${url}/login`;
           }}
           className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-gray-300 bg-white hover:shadow-md hover:bg-gray-50 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
